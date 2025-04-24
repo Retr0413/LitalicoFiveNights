@@ -4,23 +4,29 @@ using UnityEngine.UI;
 
 public class DoorController : MonoBehaviour
 {
-    public List<Button> doorButtons = new List<Button>(); // ボタンリスト
-    public List<DoorMove> doors = new List<DoorMove>();    // ドアリスト
+    public List<Button> doorButtons = new List<Button>();
+    public List<DoorMove> doors = new List<DoorMove>();
 
     private void Start()
     {
         for (int i = 0; i < doorButtons.Count; i++)
         {
-            int index = i; // ローカルキャプチャ
-            doorButtons[i].onClick.AddListener(() => ToggleLock(index));
+            int index = i; // ローカルキャプチャが重要！
+
+            doorButtons[i].onClick.AddListener(() =>
+            {
+                ToggleLock(index);
+            });
         }
     }
 
-    private void ToggleLock(int doorIndex)
+    public void ToggleLock(int doorIndex)
     {
         if (doorIndex < 0 || doorIndex >= doors.Count) return;
 
-        doors[doorIndex].Lock = !doors[doorIndex].Lock; // ロック状態を反転
-        Debug.Log($"Door {doorIndex} Lock = {doors[doorIndex].Lock}");
+        DoorMove door = doors[doorIndex];
+        door.Lock = !door.Lock;
+
+        Debug.Log($"[ToggleLock] Door {doorIndex} is now Lock = {door.Lock}");
     }
 }
