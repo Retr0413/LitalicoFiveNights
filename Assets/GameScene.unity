@@ -1419,7 +1419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186c1c6f1310b46078cb6ce68232dd56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallBlockers: []
+  wallBlockerComponents: []
 --- !u!4 &259277197
 Transform:
   m_ObjectHideFlags: 0
@@ -3325,7 +3325,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99cac2a74433d4ad5b3d7f4d7dbedac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Lock: 0
 --- !u!1 &584911547
 GameObject:
   m_ObjectHideFlags: 0
@@ -7209,7 +7208,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99cac2a74433d4ad5b3d7f4d7dbedac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Lock: 0
 --- !u!1 &1508154641
 GameObject:
   m_ObjectHideFlags: 0
@@ -8717,7 +8715,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99cac2a74433d4ad5b3d7f4d7dbedac9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Lock: 0
 --- !u!114 &1753181828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10881,9 +10878,7 @@ MonoBehaviour:
   doorButtons:
   - {fileID: 1316099034}
   - {fileID: 224238141}
-  doors:
-  - {fileID: 574542672}
-  - {fileID: 1507386775}
+  doorComponents: []
   unlockDelay: 5
 --- !u!1001 &2123145408
 PrefabInstance:

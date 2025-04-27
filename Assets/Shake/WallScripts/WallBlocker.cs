@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class WallBlocker : MonoBehaviour
+public class WallBlocker : MonoBehaviour, IWallBlocker
 {
-    public bool Block = false;
+    public bool Block { get; set; } = false;
     public float raiseHeight = 5f;
 
     private Vector3 initialPosition;
@@ -18,12 +18,10 @@ public class WallBlocker : MonoBehaviour
 
         if (Block)
         {
-            // ブロックする場合、上に移動
             transform.position = initialPosition + new Vector3(0, raiseHeight, 0);
         }
         else
         {
-            // ブロックを解除する場合、元の位置に戻す
             transform.position = initialPosition;
         }
         Debug.Log($"[ToggleBlock] Block is now {Block}");

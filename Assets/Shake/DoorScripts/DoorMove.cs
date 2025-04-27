@@ -1,6 +1,12 @@
 using UnityEngine;
 
-public class DoorMove : MonoBehaviour
+public class DoorMove : MonoBehaviour, IDoor
 {
-    public bool Lock = false;
+    private bool _lock = false;
+
+    public bool Lock
+    {
+        get => _lock;
+        set => _lock = value;
+    }
 }
