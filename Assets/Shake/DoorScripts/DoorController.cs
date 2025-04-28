@@ -11,7 +11,7 @@ public class DoorController : MonoBehaviour
     private List<IDoor> doors = new List<IDoor>();
 
     [Header("ロック解除までの時間設定")]
-    public float unlockDelay = 5f; 
+    public float unlockDelay = 5f;
 
     private void Start()
     {
@@ -38,12 +38,17 @@ public class DoorController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        UpdateButtonColors(); // ← 毎フレームボタンの色を更新
+    }
+
     public void ToggleLock(int doorIndex)
     {
         if (doorIndex < 0 || doorIndex >= doors.Count) return;
 
         IDoor door = doors[doorIndex];
-        door.Lock = true; 
+        door.Lock = true;
 
         Debug.Log($"[ToggleLock] Door {doorIndex} is now Lock = {door.Lock}");
 
@@ -54,7 +59,7 @@ public class DoorController : MonoBehaviour
     {
         yield return new WaitForSeconds(unlockDelay);
 
-        door.Lock = false; 
+        door.Lock = false;
         Debug.Log($"[AutoUnlock] Door {doorIndex} is now Lock = {door.Lock}");
     }
 
@@ -68,5 +73,32 @@ public class DoorController : MonoBehaviour
         }
 
         return lockStates;
+    }
+
+    // 👇 ここでボタンの色を更新する！
+    private void UpdateButtonColors()
+    {
+        for (int i = 0; i < doors.Count; i++)
+        {
+            if (i < doorButtons.Count)
+            {
+                ColorBlock colors = doorButtons[i].colors;
+
+                if (doors[i].Lock)
+                {
+                    // ロック中：ボタンを緑色に
+                    colors.normalColor = Color.green;
+                    colors.highlightedColor = Color.green;
+                }
+                else
+                {
+                    // ロック解除中：ボタンを白に戻す
+                    colors.normalColor = Color.white;
+                    colors.highlightedColor = Color.white;
+                }
+
+                doorButtons[i].colors = colors;
+            }
+        }
     }
 }
