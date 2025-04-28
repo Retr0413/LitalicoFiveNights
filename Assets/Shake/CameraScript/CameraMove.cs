@@ -1,75 +1,104 @@
 using UnityEngine;
+using UnityEngine.UI;
+using System.Collections;
 
 public class CameraMove : MonoBehaviour
 {
-    public float rotationAmount = 45f;           // 回転する角度（例：45度）
-    public GameObject leftButton;                // 左ボタン
-    public GameObject rightButton;               // 右ボタン
+    public float rotationAmount = 40f;         // 1回押すごとの回転角度
+    public GameObject leftButton;              // 左ボタン (GameObject)
+    public GameObject rightButton;             // 右ボタン (GameObject)
+    public Button leftUIButton;                // 左ボタン (UI.Button)
+    public Button rightUIButton;               // 右ボタン (UI.Button)
 
-    private Quaternion originalRotation;         // 初期角度（正面）
-    private int currentView = 0;                 // -1: 左, 0: 正面, 1: 右
-    private float rotationSpeed = 5f;            // 回転スピード
+    private float rotationSpeed = 5f;           // 回転スピード
+    private float currentAngle = 0f;            // 現在のカメラ角度
+    private int currentView = 0;                // -1:左 0:正面 1:右
 
     void Start()
     {
-        originalRotation = transform.rotation;
+        currentAngle = transform.eulerAngles.y;
+
+        // ボタンクリック時に呼び出すメソッドを設定
+        leftUIButton.onClick.AddListener(OnLeftButtonClick);
+        rightUIButton.onClick.AddListener(OnRightButtonClick);
+
+        UpdateButtonVisibility();
     }
 
     void Update()
     {
-        // 左キーが押された時
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        // スペースキーで正面に戻す
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (currentView == 0)
+            if (currentView != 0) // 正面以外の時だけ
             {
-                currentView = -1;
-                RotateToAngle(-rotationAmount);
-                leftButton.SetActive(false);  // 左を見たら左ボタン非表示
-                rightButton.SetActive(true);
-            }
-            else if (currentView == 1)
-            {
-                currentView = 0;
-                RotateToAngle(0);
-                leftButton.SetActive(true);   // 正面に戻ったら再び表示
-                rightButton.SetActive(true);
-            }
-        }
-
-        // 右キーが押された時
-        if (Input.GetKeyDown(KeyCode.RightArrow))
-        {
-            if (currentView == 0)
-            {
-                currentView = 1;
-                RotateToAngle(rotationAmount);
-                rightButton.SetActive(false); // 右を見たら右ボタン非表示
-                leftButton.SetActive(true);
-            }
-            else if (currentView == -1)
-            {
-                currentView = 0;
-                RotateToAngle(0);
-                rightButton.SetActive(true);  // 正面に戻ったら再び表示
-                leftButton.SetActive(true);
+                currentView = 0; // 正面にリセット
+                RotateToFront();
+                UpdateButtonVisibility();
             }
         }
     }
 
-    public void RotateToAngle(float yAngle)
+    public void OnLeftButtonClick()
     {
-        Quaternion targetRotation = Quaternion.Euler(0, yAngle, 0);
+        if (currentView > -1)
+        {
+            currentView -= 1;
+            RotateRelative(-rotationAmount);
+            UpdateButtonVisibility();
+        }
+    }
+
+    public void OnRightButtonClick()
+    {
+        if (currentView < 1)
+        {
+            currentView += 1;
+            RotateRelative(rotationAmount);
+            UpdateButtonVisibility();
+        }
+    }
+
+    public void RotateRelative(float addYAngle)
+    {
+        currentAngle += addYAngle;
+        Quaternion targetRotation = Quaternion.Euler(0, currentAngle, 0);
         StopAllCoroutines();
         StartCoroutine(SmoothRotate(targetRotation));
     }
 
-    System.Collections.IEnumerator SmoothRotate(Quaternion target)
+    public void RotateToFront()
+    {
+        currentAngle = 180f; // 正面の角度
+        Quaternion targetRotation = Quaternion.Euler(0, currentAngle, 0);
+        StopAllCoroutines();
+        StartCoroutine(SmoothRotate(targetRotation));
+    }
+
+    IEnumerator SmoothRotate(Quaternion target)
     {
         while (Quaternion.Angle(transform.rotation, target) > 0.1f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, target, rotationSpeed * Time.deltaTime);
             yield return null;
         }
-        transform.rotation = target; // 最終調整
+        transform.rotation = target;
+    }
+
+    private void UpdateButtonVisibility()
+    {
+        if (currentView == 0)
+        {
+            // 正面に戻ったら両方ON
+            leftButton.SetActive(true);
+            rightButton.SetActive(true);
+        }
+        else
+        {
+            // 左端なら左ボタンを非表示
+            leftButton.SetActive(currentView > -1);
+            // 右端なら右ボタンを非表示
+            rightButton.SetActive(currentView < 1);
+        }
     }
 }

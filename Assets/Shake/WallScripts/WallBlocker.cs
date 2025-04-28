@@ -3,12 +3,12 @@ using UnityEngine;
 public class WallBlocker : MonoBehaviour, IWallBlocker
 {
     public bool Block { get; set; } = false;
-    public float raiseHeight = 5f;
 
     private Vector3 initialPosition;
 
     private void Start()
     {
+        gameObject.SetActive(false);
         initialPosition = transform.position;
     }
 
@@ -18,11 +18,11 @@ public class WallBlocker : MonoBehaviour, IWallBlocker
 
         if (Block)
         {
-            transform.position = initialPosition + new Vector3(0, raiseHeight, 0);
+            gameObject.SetActive(true);
         }
         else
         {
-            transform.position = initialPosition;
+            gameObject.SetActive(false);
         }
         Debug.Log($"[ToggleBlock] Block is now {Block}");
     }

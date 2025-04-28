@@ -4,10 +4,12 @@ using System.Collections.Generic;
 
 public class WallManager : MonoBehaviour
 {
-    public List<Button> wallButtons = new List<Button>(); // 壁用ボタンリスト
-    public List<MonoBehaviour> wallBlockerComponents = new List<MonoBehaviour>(); // IWallBlockerを持つコンポーネント
+    public List<Button> wallButtons = new List<Button>();
+    public List<MonoBehaviour> wallBlockerComponents = new List<MonoBehaviour>();
+    public BatteryUI batteryUI; // BatteryUI参照
 
     private List<IWallBlocker> wallBlockers = new List<IWallBlocker>();
+    private bool isBatteryDead = false; // バッテリー切れフラグ
 
     private void Start()
     {
@@ -26,17 +28,65 @@ public class WallManager : MonoBehaviour
 
     private void Update()
     {
-        UpdateWallButtonColors(); // ← 毎フレームボタンの色を更新
+        CheckBatteryState();
+        UpdateWallButtonColors();
+    }
+
+    private void CheckBatteryState()
+    {
+        if (batteryUI == null) return;
+
+        if (batteryUI.BatteryPercentage <= 0f)
+        {
+            if (!isBatteryDead)
+            {
+                isBatteryDead = true;
+                ForceUnblockAllWalls();
+                SetAllButtonsInteractable(false);
+            }
+        }
+        else
+        {
+            if (isBatteryDead)
+            {
+                isBatteryDead = false;
+                SetAllButtonsInteractable(true);
+            }
+        }
+    }
+
+    private void ForceUnblockAllWalls()
+    {
+        foreach (var wall in wallBlockers)
+        {
+            wall.Block = false;
+        }
+        Debug.LogWarning("[WallManager] バッテリー切れ → 全壁ブロック解除！");
+    }
+
+    private void SetAllButtonsInteractable(bool interactable)
+    {
+        foreach (var button in wallButtons)
+        {
+            button.interactable = interactable;
+        }
     }
 
     public void ToggleWallBlock(int wallIndex)
     {
         if (wallIndex < 0 || wallIndex >= wallBlockers.Count) return;
 
+        if (batteryUI != null && batteryUI.BatteryPercentage <= 0f)
+        {
+            IWallBlocker wall = wallBlockers[wallIndex];
+            wall.Block = false;
+            Debug.LogWarning($"[WallManager] バッテリー切れのため Wall {wallIndex} をBlockできませんでした（強制解除）！");
+            return;
+        }
+
         wallBlockers[wallIndex].ToggleBlock();
     }
 
-    // 全WallのBlock状態を取得するメソッド
     public List<bool> GetAllWallBlockStates()
     {
         List<bool> blockStates = new List<bool>();
@@ -49,7 +99,6 @@ public class WallManager : MonoBehaviour
         return blockStates;
     }
 
-    // 👇 ここでボタンの色を更新する
     private void UpdateWallButtonColors()
     {
         for (int i = 0; i < wallBlockers.Count; i++)
@@ -60,13 +109,11 @@ public class WallManager : MonoBehaviour
 
                 if (wallBlockers[i].Block)
                 {
-                    // ブロック中：緑色に
                     colors.normalColor = Color.green;
                     colors.highlightedColor = Color.green;
                 }
                 else
                 {
-                    // ブロック解除中：白色に戻す
                     colors.normalColor = Color.white;
                     colors.highlightedColor = Color.white;
                 }
