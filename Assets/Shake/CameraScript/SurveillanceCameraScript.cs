@@ -20,6 +20,12 @@ public class SurveillanceCameraScript : MonoBehaviour
     [Header("MainCamera時にカメラ名を表示するText")]
     public Text mainCameraInfoText;
 
+    [Header("SystemManagerの参照")]
+    public SystemManager systemManager;
+
+    [Header("プレイヤー用UI（監視モード時に非表示）")]
+    public GameObject playerUI;  // ★ 追加
+
     private int currentCameraIndex = 0;
     private bool isInSurveillanceMode = true;
 
@@ -54,8 +60,15 @@ public class SurveillanceCameraScript : MonoBehaviour
             {
                 if (hit.collider.CompareTag("Monitor"))
                 {
-                    isInSurveillanceMode = true;
-                    SwitchToCamera(currentCameraIndex);
+                    if (systemManager != null && systemManager.IsFacingMonitor())
+                    {
+                        isInSurveillanceMode = true;
+                        SwitchToCamera(currentCameraIndex);
+                    }
+                    else
+                    {
+                        Debug.Log("プレイヤーが正面（Y=180±20）を向いていないため、カメラ切り替え不可。");
+                    }
                 }
             }
         }
@@ -77,14 +90,13 @@ public class SurveillanceCameraScript : MonoBehaviour
             mainCamera.transform.rotation = surveillanceCameras[index].transform.rotation;
 
             if (cameraLabelText != null)
-            {
                 cameraLabelText.text = $"現在のカメラ: {surveillanceCameras[index].name}";
-            }
 
             if (mainCameraInfoText != null)
-            {
-                mainCameraInfoText.text = ""; // MainCameraの時のみ表示する
-            }
+                mainCameraInfoText.text = "";
+
+            if (playerUI != null)
+                playerUI.SetActive(false); // ★ プレイヤーUIを非表示
 
             Debug.Log($"[監視カメラ切替] Index: {index}, Name: {surveillanceCameras[index].name}");
         }
@@ -108,14 +120,13 @@ public class SurveillanceCameraScript : MonoBehaviour
         mainCamera.transform.rotation = mainCameraDefaultRotation;
 
         if (cameraLabelText != null)
-        {
             cameraLabelText.text = "";
-        }
 
         if (mainCameraInfoText != null && surveillanceCameras.Count > 0)
-        {
             mainCameraInfoText.text = $"現在表示中のカメラ映像: {surveillanceCameras[currentCameraIndex].name}";
-        }
+
+        if (playerUI != null)
+            playerUI.SetActive(true); // ★ プレイヤーUIを再表示
 
         Debug.Log("[監視カメラ解除] メインカメラに戻りました");
     }
@@ -126,13 +137,10 @@ public class SurveillanceCameraScript : MonoBehaviour
         if (backButton != null) backButton.gameObject.SetActive(isInSurveillanceMode);
     }
 
-    // 外部用 Getter
     public Camera GetCurrentCamera()
     {
         if (currentCameraIndex >= 0 && currentCameraIndex < surveillanceCameras.Count)
-        {
             return surveillanceCameras[currentCameraIndex];
-        }
         return null;
     }
 
