@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;  // ← SliderとImageを使うので必要
+using UnityEngine.UI;
 
 public class SystemManager : MonoBehaviour
 {
@@ -7,20 +7,19 @@ public class SystemManager : MonoBehaviour
     public GameObject PlayerButton;
 
     [Header("バッテリーバーとイメージリスト")]
-    public GameObject[] batteryBars;     // バッテリーバー (例: Sliderオブジェクト)
-    public GameObject[] batteryImages;   // バッテリーイメージ (例: Imageオブジェクト)
+    public GameObject[] batteryBars;
+    public GameObject[] batteryImages;
 
-    private bool isDoorActive = false; // DoorManagerがオンになっているかどうか
+    [Header("プレイヤー参照")]
+    public Transform playerTransform;  // ← プレイヤー（またはMainCamera）のTransformを指定
+
+    private bool isDoorActive = false;
 
     void Start()
     {
-        if (DoorManager != null)
-            DoorManager.SetActive(false);
+        if (DoorManager != null) DoorManager.SetActive(false);
+        if (PlayerButton != null) PlayerButton.SetActive(true);
 
-        if (PlayerButton != null)
-            PlayerButton.SetActive(true);
-
-        // 初期状態: 最初のバーとイメージだけONにして、他はOFF
         if (batteryBars.Length >= 2 && batteryImages.Length >= 2)
         {
             batteryBars[0].SetActive(true);
@@ -32,7 +31,7 @@ public class SystemManager : MonoBehaviour
 
     void Update()
     {
-        // ① 左クリックでDoorManagerをオンにする
+        // ① 左クリックでDoorManagerをオンにする（正面を向いている場合のみ）
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -50,7 +49,6 @@ public class SystemManager : MonoBehaviour
                     if (PlayerButton != null)
                         PlayerButton.SetActive(false);
 
-                    // クリック時: バッテリーの表示切り替え
                     SwitchBatteryUI(toSecond: true);
                 }
             }
@@ -67,32 +65,27 @@ public class SystemManager : MonoBehaviour
             if (PlayerButton != null)
                 PlayerButton.SetActive(true);
 
-            // Eキー押したら: バッテリーの表示を元に戻す
             SwitchBatteryUI(toSecond: false);
         }
     }
 
-    // 👇 バッテリーバーとイメージの切り替えメソッド
     private void SwitchBatteryUI(bool toSecond)
     {
         if (batteryBars.Length >= 2 && batteryImages.Length >= 2)
         {
-            if (toSecond)
-            {
-                // 2番目をON、1番目をOFF
-                batteryBars[0].SetActive(false);
-                batteryImages[0].SetActive(false);
-                batteryBars[1].SetActive(true);
-                batteryImages[1].SetActive(true);
-            }
-            else
-            {
-                // 1番目をON、2番目をOFF
-                batteryBars[0].SetActive(true);
-                batteryImages[0].SetActive(true);
-                batteryBars[1].SetActive(false);
-                batteryImages[1].SetActive(false);
-            }
+            batteryBars[0].SetActive(!toSecond);
+            batteryImages[0].SetActive(!toSecond);
+            batteryBars[1].SetActive(toSecond);
+            batteryImages[1].SetActive(toSecond);
         }
+    }
+
+    // 正面がY=180度（±20度の範囲）に向いているか
+    public bool IsFacingMonitor()
+    {
+        if (playerTransform == null) return false;
+
+        float y = playerTransform.eulerAngles.y;
+        return (y >= 160f && y <= 200f);  // Y=180 ±20の範囲
     }
 }
