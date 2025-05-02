@@ -14,9 +14,17 @@ public class MoveTo : MonoBehaviour {
     [SerializeField] private float minWaitTime = 0.5f;
     [SerializeField] private float maxWaitTime = 3.0f; // 移動速度
 
+    private Coroutine moveCoroutine; // プレイヤーに向かうコルーチン
+
     void Start () {
         ResetPosition(); // スタート地点をランダムに決める
-        StartCoroutine(MoveToPlayer()); // プレイヤーに向かう
+        moveCoroutine = StartCoroutine(MoveToPlayer()); // プレイヤーに向かう
+    }
+
+    private void Update(){
+        if (current.IsNearestDoorClosed()){
+            Rerouting();
+        }
     }
 
     private void ReachPlayer(){
@@ -52,11 +60,28 @@ public class MoveTo : MonoBehaviour {
         SetPosition(start);
     }
 
+    private void Rerouting(){
+        StopMoveCoroutine();
+        ResetPosition();
+        moveCoroutine = StartCoroutine(MoveToPlayer());
+    }
+
+    private void StopMoveCoroutine(){
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine = null;
+        }
+    }
+
     IEnumerator MoveToPlayer()
     {
+        Debug.Log("Moving to player...");
         List<TeleportPoint> route = getRoute();
-        if (route == null || route.Count == 0)
+        if (route == null || route.Count == 0){
+            Rerouting();
             yield break;
+        }
 
         foreach (var point in route)
         {
