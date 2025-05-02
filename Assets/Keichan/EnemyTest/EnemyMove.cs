@@ -13,6 +13,9 @@ public class MoveTo : MonoBehaviour {
 
     [SerializeField] private float minWaitTime = 0.5f;
     [SerializeField] private float maxWaitTime = 3.0f; // 移動速度
+    [SerializeField] private float preTeleportTime = 1f;
+
+    [SerializeField] private bool preTeleport = false;
 
     private Coroutine moveCoroutine; // プレイヤーに向かうコルーチン
 
@@ -87,6 +90,9 @@ public class MoveTo : MonoBehaviour {
         {
             float waitTime = Random.Range(minWaitTime, maxWaitTime);
             yield return new WaitForSeconds(waitTime);
+            preTeleport = true;
+            yield return new WaitForSeconds(preTeleportTime);
+            preTeleport = false;
             SetPosition(point);
         }
     }
