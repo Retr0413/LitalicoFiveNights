@@ -48,7 +48,7 @@ public class Pathfinder : MonoBehaviour
 
                 if (!openSet.Contains(neighbor))
                     openSet.Add(neighbor);
-                else if (tentativeGScore >= gScore[current])
+                else if (gScore.ContainsKey(neighbor) && tentativeGScore >= gScore[neighbor])
                     continue;
 
                 cameFrom[neighbor] = current;
