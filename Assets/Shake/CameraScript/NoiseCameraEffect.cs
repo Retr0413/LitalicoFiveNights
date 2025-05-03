@@ -31,16 +31,24 @@ public class NoiseCameraEffect : MonoBehaviour
 
     void Update()
     {
-        // ノイズ表示中のみ透明度を変化させる
         if (noiseCanvas.gameObject.activeSelf)
         {
-            float alpha = Mathf.Lerp(minAlpha, maxAlpha, Mathf.PerlinNoise(Time.time * noiseSpeed, 0));
+            float noiseBase = Mathf.PerlinNoise(Time.time * noiseSpeed, 0);
+            
+            // 👇 ノイズ倍率を補正する
+            if (CameraShowEnemy.instance != null && CameraShowEnemy.instance.isEnemyVisible)
+            {
+                // ノイズを強調（maxAlpha に近づける）
+                noiseBase = Mathf.Clamp01(noiseBase + 0.5f);
+            }
+
+            float alpha = Mathf.Lerp(minAlpha, maxAlpha, noiseBase);
+
             Color color = noiseImage.color;
             color.a = alpha;
             noiseImage.color = color;
         }
 
-        // カメラ切り替え例（キー入力）
         if (Input.GetKeyDown(KeyCode.C))
         {
             activeCameraIndex = (activeCameraIndex + 1) % cameras.Count;
