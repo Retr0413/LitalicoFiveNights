@@ -3,13 +3,11 @@ using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Collections;
 
-public class MoveTo : MonoBehaviour {
+public class EnemyMove : MonoBehaviour {
 
-    [SerializeField] private TeleportPoint playerPosition; 
+    public TeleportPoint playerPosition; 
     [SerializeField] private TeleportPoint current;
-    [SerializeField] private TeleportPoint[] startPoints; // この中からランダムに決める
-
-    [SerializeField] private Pathfinder pathfinder; // 経路探索
+    public TeleportPoint[] startPoints; // この中からランダムに決める
 
     [SerializeField] private float minWaitTime = 0.5f;
     [SerializeField] private float maxWaitTime = 3.0f; // 移動速度
@@ -17,21 +15,37 @@ public class MoveTo : MonoBehaviour {
 
     [SerializeField] private bool preTeleport = false;
 
-    private Coroutine moveCoroutine; // プレイヤーに向かうコルーチン
+    private Coroutine moveCoroutine; // プレイヤーに向かうコルーチン。止めるために必要
 
     void Start () {
+        TimeManager.OnDayChanged += EndDay; // 日付が変わったときの処理
         ResetPosition(); // スタート地点をランダムに決める
         moveCoroutine = StartCoroutine(MoveToPlayer()); // プレイヤーに向かう
     }
 
     private void Update(){
+        // 近くの障害物が閉じていたら、初期値に戻ってルートを再計算
         if (current.IsNearestObstaclesClosed()){
             Rerouting();
         }
     }
 
+    private void Rerouting(){
+        StopMoveCoroutine();
+        ResetPosition();
+        foreach(var point in startPoints){
+            Debug.Log(point.gameObject.name);
+        }
+        moveCoroutine = StartCoroutine(MoveToPlayer());
+    }
+
     private void ReachPlayer(){
 
+    }
+
+    public void EndDay(int day){
+        StopMoveCoroutine();
+        Destroy(gameObject);
     }
 
     private List<TeleportPoint> getRoute(){
@@ -61,12 +75,6 @@ public class MoveTo : MonoBehaviour {
     {
         TeleportPoint start = startPoints[Random.Range(0, startPoints.Length)];
         SetPosition(start);
-    }
-
-    private void Rerouting(){
-        StopMoveCoroutine();
-        ResetPosition();
-        moveCoroutine = StartCoroutine(MoveToPlayer());
     }
 
     private void StopMoveCoroutine(){
