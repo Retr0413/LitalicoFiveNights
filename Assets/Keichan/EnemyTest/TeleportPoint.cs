@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public class TeleportPoint : MonoBehaviour
 {
     public List<TeleportPoint> neighbors = new List<TeleportPoint>();
-    [SerializeField] private DoorMoveTest nearestDoor; // 最寄りのドア
+    [SerializeField] private DoorMove nearestDoor; // 最寄りのドア
+    [SerializeField] private WallBlocker nearestWallBlocker; // 最寄りの壁
 
     // エディタ上での可視化
     private void OnDrawGizmos()
@@ -22,8 +23,9 @@ public class TeleportPoint : MonoBehaviour
         }
     }
 
-    public bool IsNearestDoorClosed(){
+    public bool IsNearestObstaclesClosed(){
         if (nearestDoor == null) return false;
-        return nearestDoor.Lock;
+        if (nearestWallBlocker == null) return false;
+        return nearestDoor.Lock || nearestWallBlocker.Block;
     }
 }

@@ -25,7 +25,7 @@ public class MoveTo : MonoBehaviour {
     }
 
     private void Update(){
-        if (current.IsNearestDoorClosed()){
+        if (current.IsNearestObstaclesClosed()){
             Rerouting();
         }
     }
@@ -36,7 +36,7 @@ public class MoveTo : MonoBehaviour {
 
     private List<TeleportPoint> getRoute(){
         
-        List<TeleportPoint> route = Pathfinder.AStar(current, playerPosition);
+        List<TeleportPoint> route = Pathfinder.GetRandomPath(current, playerPosition);
         if (route == null || route.Count == 0)
         {
             Debug.Log("No path found");
