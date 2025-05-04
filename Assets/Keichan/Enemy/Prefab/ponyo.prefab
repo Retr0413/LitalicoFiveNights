@@ -96,3 +96,4 @@ MonoBehaviour:
   maxWaitTime: 14
   preTeleportTime: 1
   preTeleport: 0
+  GameOverSceneName: PonyoGameOverSceneL
