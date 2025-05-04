@@ -1,14 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement; // ← シーン遷移に必要
 using System;
 
 public class TimeManager : MonoBehaviour
 {
-    public Text timeText;            // 現在の時間を表示
-    public Image timeGauge;          // ゲージ表示
-    public int startHour = 12;       // 開始時間（固定）
-    public int endHour = 6;          // 終了時間（固定）
-    public float hourInterval = 20f; // 1時間の経過秒数
+    public Text timeText;
+    public Image timeGauge;
+    public int startHour = 12;
+    public int endHour = 6;
+    public float hourInterval = 20f;
 
     public static event Action<int> OnDayChanged;
 
@@ -21,29 +22,32 @@ public class TimeManager : MonoBehaviour
     void Start()
     {
         currentHour = startHour;
-        totalHours = (endHour + 12) - startHour; // 6 - 12 + 12 = 6
+        totalHours = (endHour + 12) - startHour;
         totalTime = hourInterval * totalHours;
 
         UpdateTimeText();
         OnDayChanged?.Invoke(currentDay);
+        Debug.Log($"[DayChanged Start] Day {currentDay}");
     }
 
     void Update()
     {
-        // Day6超えたらストップ（Clear扱い）
-        if (currentDay > 5) return;
+        // Day6超えたらストップ（Clear扱い）＋シーン遷移
+        if (currentDay > 5)
+        {
+            Debug.Log("6日目終了。シーン遷移します。");
+            SceneManager.LoadScene("GameClear"); // ← シーン名を必要に応じて変更
+            return;
+        }
 
         timer += Time.deltaTime;
 
         if (timer >= hourInterval)
         {
             timer -= hourInterval;
-
-            // ★ 時間を加算してから判定
             currentHour++;
             if (currentHour > 12) currentHour = 1;
 
-            // ★ 6時に到達したらDay切り替え
             if (currentHour == endHour)
             {
                 currentDay++;
@@ -56,22 +60,21 @@ public class TimeManager : MonoBehaviour
                     if (timeGauge != null)
                         timeGauge.fillAmount = 1f;
 
-                    OnDayChanged?.Invoke(currentDay);
                     UpdateTimeText();
-                    return; // ★ currentHourの再加算を防止
+                    OnDayChanged?.Invoke(currentDay);
+                    Debug.Log($"[DayChanged] Day {currentDay}");
+                    return;
                 }
                 else
                 {
-                    UpdateTimeText();
+                    UpdateTimeText(); // 表示を"Clear!"に更新
                     return;
                 }
             }
 
-            // 通常の時間更新
             UpdateTimeText();
         }
 
-        // ゲージ減少ロジック（経過時間から算出）
         if (timeGauge != null)
         {
             int hoursPassed = (currentHour >= startHour)

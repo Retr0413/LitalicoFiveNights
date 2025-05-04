@@ -13,6 +13,7 @@ public class BatteryUI : MonoBehaviour
     public float BatteryPercentage = 100f;
     public float drainPerSecondDoor = 5f;
     public float drainPerSecondWall = 5f;
+    public float autoDrainPerSecond = 0.1f;  // ★ 自動減少（0.1%/秒）
 
     [Header("チェック対象")]
     public List<MonoBehaviour> targetComponents = new List<MonoBehaviour>();
@@ -35,13 +36,11 @@ public class BatteryUI : MonoBehaviour
 
     private void OnEnable()
     {
-        // ⭐ TimeManagerのOnDayChangedイベントに登録
         TimeManager.OnDayChanged += ResetBattery;
     }
 
     private void OnDisable()
     {
-        // ⭐ イベント解除（メモリリーク防止）
         TimeManager.OnDayChanged -= ResetBattery;
     }
 
@@ -67,6 +66,9 @@ public class BatteryUI : MonoBehaviour
                 totalDrain += drainPerSecondWall * Time.deltaTime;
         }
 
+        // ★ 常時自動で0.1ずつ減少
+        totalDrain += autoDrainPerSecond * Time.deltaTime;
+
         if (BatteryPercentage > 0)
         {
             BatteryPercentage -= totalDrain;
@@ -84,7 +86,7 @@ public class BatteryUI : MonoBehaviour
         foreach (var text in batteryTexts)
         {
             if (text != null)
-                text.text = "Battery: " + Mathf.RoundToInt(BatteryPercentage) + "%";
+                text.text = "バッテリー: " + Mathf.RoundToInt(BatteryPercentage) + "%";
         }
 
         foreach (var slider in batterySliders)
