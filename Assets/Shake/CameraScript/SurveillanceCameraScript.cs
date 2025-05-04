@@ -26,6 +26,9 @@ public class SurveillanceCameraScript : MonoBehaviour
     [Header("プレイヤー用UI（監視モード時に非表示）")]
     public GameObject playerUI;
 
+    [Header("監視カメラ表示用テキストオブジェクト（ON/OFF切り替え対象）")]
+    public GameObject cameraTextObject; // ★ GameObjectで参照
+
     [Header("ノイズ画像（透明PNG）")]
     public Sprite noiseSprite;
 
@@ -117,6 +120,9 @@ public class SurveillanceCameraScript : MonoBehaviour
             if (mainCameraInfoText != null)
                 mainCameraInfoText.text = "";
 
+            if (cameraTextObject != null)
+                cameraTextObject.SetActive(true); // ★ 表示ON
+
             if (playerUI != null)
                 playerUI.SetActive(false);
 
@@ -147,6 +153,9 @@ public class SurveillanceCameraScript : MonoBehaviour
         if (cameraLabelText != null)
             cameraLabelText.text = "";
 
+        if (cameraTextObject != null)
+            cameraTextObject.SetActive(false); // ★ 非表示
+
         if (mainCameraInfoText != null && surveillanceCameras.Count > 0)
             mainCameraInfoText.text = $"現在表示中のカメラ映像: {surveillanceCameras[currentCameraIndex].name}";
 
@@ -170,7 +179,7 @@ public class SurveillanceCameraScript : MonoBehaviour
         GameObject canvasObj = new GameObject("NoiseCanvas");
         noiseCanvas = canvasObj.AddComponent<Canvas>();
         noiseCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        noiseCanvas.sortingOrder = -1; // UIより背後
+        noiseCanvas.sortingOrder = -1;
 
         CanvasScaler scaler = canvasObj.AddComponent<CanvasScaler>();
         scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;

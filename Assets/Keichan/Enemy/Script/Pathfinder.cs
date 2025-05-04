@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class Pathfinder : MonoBehaviour
@@ -81,5 +82,24 @@ public class Pathfinder : MonoBehaviour
         {
             Debug.DrawLine(path[i].transform.position, path[i + 1].transform.position, Color.red, 5f);
         }
+    }
+
+    public static List<TeleportPoint> GetRandomPath(TeleportPoint start, TeleportPoint goal)
+    {
+        List<TeleportPoint> path = new List<TeleportPoint>();
+        TeleportPoint current = start;
+        while (goal != current)
+        {
+            int nextIndex = Random.Range(0, current.neighbors.Count);
+            current = current.neighbors[nextIndex];
+            path.Add(current);
+        }
+
+        Debug.Log("Path found: " + path.Count + " points.");
+        foreach (var point in path)
+        {
+            Debug.Log(point.name);
+        }
+        return path;
     }
 }

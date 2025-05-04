@@ -38,13 +38,12 @@ public class TimeManager : MonoBehaviour
         if (timer >= hourInterval)
         {
             timer -= hourInterval;
+
+            // ★ 時間を加算してから判定
             currentHour++;
+            if (currentHour > 12) currentHour = 1;
 
-            if (currentHour > 12) currentHour = 1; // 12 → 1 → 2 → ...
-
-            UpdateTimeText();
-
-            // 日が変わる条件（6時になったら）
+            // ★ 6時に到達したらDay切り替え
             if (currentHour == endHour)
             {
                 currentDay++;
@@ -59,13 +58,17 @@ public class TimeManager : MonoBehaviour
 
                     OnDayChanged?.Invoke(currentDay);
                     UpdateTimeText();
+                    return; // ★ currentHourの再加算を防止
                 }
                 else
                 {
-                    // 最終日超えた後
                     UpdateTimeText();
+                    return;
                 }
             }
+
+            // 通常の時間更新
+            UpdateTimeText();
         }
 
         // ゲージ減少ロジック（経過時間から算出）
@@ -73,7 +76,7 @@ public class TimeManager : MonoBehaviour
         {
             int hoursPassed = (currentHour >= startHour)
                 ? currentHour - startHour
-                : (12 - startHour + currentHour); // 例：12→1→2→3 のときの経過時間
+                : (12 - startHour + currentHour);
 
             float totalElapsed = (hoursPassed * hourInterval) + timer;
             float remaining = Mathf.Clamp01(1f - (totalElapsed / totalTime));
