@@ -12,11 +12,10 @@ EditorBuildSettings:
     path: Assets/GameScene.unity
     guid: a4a558a443e844b7e951e658e8ea435a
   - enabled: 1
-    path: Assets/StartScene.unity
-    guid: 0e2e12ecf31e545f78db8da972295e9d
+    path: Assets/Keichan/Enemy/GameOverScene/LilyGameOverSceneL.unity
+    guid: 5cc3a847e45ed0f4eb8db2476d26d66c
   - enabled: 1
-    path: Assets/Shake/GameClear.unity
-    guid: 5ce03a00fed6b4750b19d45f176907e2
+    path: Assets/Keichan/Enemy/GameOverScene/MatsuGameOverSceneL.unity
+    guid: 529b9a834aa26bb4db09f7c050abd60d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  m_UseUCBPForAssetBundles: 0
