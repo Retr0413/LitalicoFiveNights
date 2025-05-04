@@ -56,6 +56,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 3377391315477201427, guid: 4bd727f687eb04bfda82afa05b76c4c0, type: 3}
+      propertyPath: 'm_Materials.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 8f8cd4eafc1ba44c1a7289f835dad9f0, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 4bd727f687eb04bfda82afa05b76c4c0, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 5298c803b4b4b4530b9a6323c6d009a7, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -84,7 +92,7 @@ MonoBehaviour:
   playerPosition: {fileID: 0}
   current: {fileID: 0}
   startPoints: []
-  minWaitTime: 0.5
-  maxWaitTime: 10
-  preTeleportTime: 14
+  minWaitTime: 10
+  maxWaitTime: 14
+  preTeleportTime: 1
   preTeleport: 0
