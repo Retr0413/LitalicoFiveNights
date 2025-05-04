@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; // ← シーン遷移に必要
+using UnityEngine.SceneManagement;
 using System;
+using System.Collections;
 
 public class TimeManager : MonoBehaviour
 {
@@ -12,12 +13,14 @@ public class TimeManager : MonoBehaviour
     public float hourInterval = 20f;
 
     public static event Action<int> OnDayChanged;
+    public static event Action OnGameClear;  // ★ Clear時イベント追加
 
     private int currentHour;
     private float timer = 0f;
     private int totalHours;
     private float totalTime;
     private int currentDay = 1;
+    private bool hasCleared = false;
 
     void Start()
     {
@@ -32,13 +35,7 @@ public class TimeManager : MonoBehaviour
 
     void Update()
     {
-        // Day6超えたらストップ（Clear扱い）＋シーン遷移
-        if (currentDay > 5)
-        {
-            Debug.Log("6日目終了。シーン遷移します。");
-            SceneManager.LoadScene("GameClear"); // ← シーン名を必要に応じて変更
-            return;
-        }
+        if (hasCleared) return;
 
         timer += Time.deltaTime;
 
@@ -67,7 +64,9 @@ public class TimeManager : MonoBehaviour
                 }
                 else
                 {
-                    UpdateTimeText(); // 表示を"Clear!"に更新
+                    hasCleared = true;
+                    UpdateTimeText();
+                    OnGameClear?.Invoke(); // ★ Clearイベント発火
                     return;
                 }
             }
