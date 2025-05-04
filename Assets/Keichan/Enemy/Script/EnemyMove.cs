@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections.Generic;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class EnemyMove : MonoBehaviour {
 
@@ -14,6 +15,8 @@ public class EnemyMove : MonoBehaviour {
     [SerializeField] private float preTeleportTime = 1f;
 
     [SerializeField] private bool preTeleport = false;
+
+    public string GameOverSceneName = "GameOverScene";
 
     private Coroutine moveCoroutine; // プレイヤーに向かうコルーチン。止めるために必要
 
@@ -40,7 +43,8 @@ public class EnemyMove : MonoBehaviour {
     }
 
     private void ReachPlayer(){
-
+        StopMoveCoroutine();
+        SceneManager.LoadScene(GameOverSceneName);
     }
 
     public void EndDay(int day){
@@ -101,6 +105,10 @@ public class EnemyMove : MonoBehaviour {
             preTeleport = true;
             yield return new WaitForSeconds(preTeleportTime);
             preTeleport = false;
+            if(point == playerPosition){
+                ReachPlayer();
+                yield break;
+            }
             SetPosition(point);
         }
     }

@@ -191,7 +191,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: f6eb557662f3b41bca9e6aba0f5333a9, type: 2}
     - target: {fileID: 919132149155446097, guid: 0c168239dca6d4798b4e612b2464b859, type: 3}
       propertyPath: m_Name
-      value: lily
+      value: lilyGameOver
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0c168239dca6d4798b4e612b2464b859, type: 3}
       propertyPath: m_IsActive
@@ -204,7 +204,7 @@ PrefabInstance:
     - target: {fileID: 5866666021909216657, guid: 0c168239dca6d4798b4e612b2464b859, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 3e62ec4e442bf47279c04bcff8d200f0, type: 2}
+      objectReference: {fileID: 9100000, guid: 8e0c3a3ac4d824847b11cec707e9f81f, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -326,7 +326,6 @@ MonoBehaviour:
   maxWaitTime: 14
   preTeleportTime: 1
   preTeleport: 0
-  GameOverSceneName: LilyGameOverSceneL
 --- !u!4 &7817980194176514741 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0c168239dca6d4798b4e612b2464b859, type: 3}
@@ -346,15 +345,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7649275578467174921, guid: 7faf413ddded778418c6fe63a2586002, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.017512992
+      value: 0.009999996
       objectReference: {fileID: 0}
     - target: {fileID: 7649275578467174921, guid: 7faf413ddded778418c6fe63a2586002, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.017513005
+      value: 0.0100000035
       objectReference: {fileID: 0}
     - target: {fileID: 7649275578467174921, guid: 7faf413ddded778418c6fe63a2586002, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.017513027
+      value: 0.010000016
       objectReference: {fileID: 0}
     - target: {fileID: 7649275578467174921, guid: 7faf413ddded778418c6fe63a2586002, type: 3}
       propertyPath: m_LocalPosition.x
