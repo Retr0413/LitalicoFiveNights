@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &318142192093946814
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8844896827589984795, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: 'm_Materials.Array.data[2]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 05f62e4d79477481d8989f114c8e38f5, type: 2}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_Name
+      value: ponyo
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c63f4727c48ca4e039e10c5ba6d6a9ec, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2900628642449444999}
+  m_SourcePrefab: {fileID: 100100000, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+--- !u!1 &624642944189587183 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: dfd70431c75884d128ab87e54d86406b, type: 3}
+  m_PrefabInstance: {fileID: 318142192093946814}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2900628642449444999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624642944189587183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871d80a68893f77499041cea1fdbf973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerPosition: {fileID: 0}
+  current: {fileID: 0}
+  startPoints: []
+  minWaitTime: 10
+  maxWaitTime: 14
+  preTeleportTime: 1
+  preTeleport: 0
