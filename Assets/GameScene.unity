@@ -395,7 +395,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &71204495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -769,7 +769,7 @@ RectTransform:
   m_Father: {fileID: 692501514}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -19816,7 +19816,7 @@ RectTransform:
   m_Father: {fileID: 1972424223}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -25390,7 +25390,6 @@ MonoBehaviour:
   - {fileID: 211143029}
   - {fileID: 939574572}
   batteryUI: {fileID: 150295341}
-  unlockDelay: 5
 --- !u!1001 &2123145408
 PrefabInstance:
   m_ObjectHideFlags: 0

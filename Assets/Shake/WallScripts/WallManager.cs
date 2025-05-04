@@ -4,12 +4,17 @@ using System.Collections.Generic;
 
 public class WallManager : MonoBehaviour
 {
+    [Header("壁を操作するボタン")]
     public List<Button> wallButtons = new List<Button>();
+
+    [Header("WallBlocker スクリプト（MonoBehaviourとして取得）")]
     public List<MonoBehaviour> wallBlockerComponents = new List<MonoBehaviour>();
-    public BatteryUI batteryUI; // BatteryUI参照
+
+    [Header("バッテリー参照")]
+    public BatteryUI batteryUI;
 
     private List<IWallBlocker> wallBlockers = new List<IWallBlocker>();
-    private bool isBatteryDead = false; // バッテリー切れフラグ
+    private bool isBatteryDead = false;
 
     private void Start()
     {
@@ -29,7 +34,7 @@ public class WallManager : MonoBehaviour
     private void Update()
     {
         CheckBatteryState();
-        UpdateWallButtonColors();
+        UpdateWallButtonColors(); // 毎フレーム色を更新
     }
 
     private void CheckBatteryState()
@@ -78,24 +83,22 @@ public class WallManager : MonoBehaviour
 
         if (batteryUI != null && batteryUI.BatteryPercentage <= 0f)
         {
-            IWallBlocker wall = wallBlockers[wallIndex];
-            wall.Block = false;
+            wallBlockers[wallIndex].Block = false;
             Debug.LogWarning($"[WallManager] バッテリー切れのため Wall {wallIndex} をBlockできませんでした（強制解除）！");
             return;
         }
 
         wallBlockers[wallIndex].ToggleBlock();
+        UpdateWallButtonColors(); // 即時色反映
     }
 
     public List<bool> GetAllWallBlockStates()
     {
         List<bool> blockStates = new List<bool>();
-
         foreach (var blocker in wallBlockers)
         {
             blockStates.Add(blocker.Block);
         }
-
         return blockStates;
     }
 
@@ -103,19 +106,22 @@ public class WallManager : MonoBehaviour
     {
         for (int i = 0; i < wallBlockers.Count; i++)
         {
-            if (i < wallButtons.Count)
+            if (i < wallButtons.Count && wallButtons[i] != null)
             {
                 ColorBlock colors = wallButtons[i].colors;
 
                 if (wallBlockers[i].Block)
                 {
-                    colors.normalColor = Color.green;
-                    colors.highlightedColor = Color.green;
+                    Color limeGreen = new Color(0.5f, 1f, 0.5f); // 黄緑色
+                    colors.normalColor = limeGreen;
+                    colors.highlightedColor = limeGreen;
+                    colors.selectedColor = limeGreen;
                 }
                 else
                 {
                     colors.normalColor = Color.white;
                     colors.highlightedColor = Color.white;
+                    colors.selectedColor = Color.white;
                 }
 
                 wallButtons[i].colors = colors;

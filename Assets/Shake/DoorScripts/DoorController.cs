@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,13 +9,11 @@ public class DoorController : MonoBehaviour
     public BatteryUI batteryUI; // BatteryUI参照
 
     private List<IDoor> doors = new List<IDoor>();
-    private bool isBatteryDead = false; // バッテリー切れフラグ
-
-    [Header("ロック解除までの時間設定")]
-    public float unlockDelay = 5f;
+    private bool isBatteryDead = false;
 
     private void Start()
     {
+        // IDoor の実装を抽出
         foreach (var component in doorComponents)
         {
             if (component is IDoor door)
@@ -29,6 +26,7 @@ public class DoorController : MonoBehaviour
             }
         }
 
+        // ボタンイベント登録
         for (int i = 0; i < doorButtons.Count; i++)
         {
             int index = i;
@@ -88,31 +86,15 @@ public class DoorController : MonoBehaviour
 
         if (batteryUI != null && batteryUI.BatteryPercentage <= 0f)
         {
-            IDoor door = doors[doorIndex];
-            door.Lock = false;
+            doors[doorIndex].Lock = false;
             Debug.LogWarning($"[DoorController] バッテリー切れのため Door {doorIndex} をLockできませんでした（強制解除）！");
             return;
         }
 
-        IDoor normalDoor = doors[doorIndex];
-        normalDoor.Lock = true;
-        Debug.Log($"[ToggleLock] Door {doorIndex} is now Lock = {normalDoor.Lock}");
+        doors[doorIndex].Lock = !doors[doorIndex].Lock;
+        Debug.Log($"[ToggleLock] Door {doorIndex} is now Lock = {doors[doorIndex].Lock}");
 
-        StartCoroutine(AutoUnlock(normalDoor, doorIndex));
-    }
-
-    private IEnumerator AutoUnlock(IDoor door, int doorIndex)
-    {
-        yield return new WaitForSeconds(unlockDelay);
-
-        if (batteryUI != null && batteryUI.BatteryPercentage <= 0f)
-        {
-            // バッテリー切れなら解除しない（もう解除されてるはず）
-            yield break;
-        }
-
-        door.Lock = false;
-        Debug.Log($"[AutoUnlock] Door {doorIndex} is now Lock = {door.Lock}");
+        UpdateButtonColors(); // 色更新
     }
 
     private void UpdateButtonColors()
@@ -125,13 +107,18 @@ public class DoorController : MonoBehaviour
 
                 if (doors[i].Lock)
                 {
-                    colors.normalColor = Color.green;
-                    colors.highlightedColor = Color.green;
+                    Color limeGreen = new Color(0.5f, 1f, 0.5f); // 黄緑色
+                    colors.normalColor = limeGreen;
+                    colors.highlightedColor = limeGreen;
+                    colors.pressedColor = limeGreen;
+                    colors.selectedColor = limeGreen;
                 }
                 else
                 {
                     colors.normalColor = Color.white;
                     colors.highlightedColor = Color.white;
+                    colors.pressedColor = Color.white;
+                    colors.selectedColor = Color.white;
                 }
 
                 doorButtons[i].colors = colors;
