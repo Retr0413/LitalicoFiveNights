@@ -48,6 +48,7 @@ public class EnemyMove : MonoBehaviour {
     }
 
     public void EndDay(int day){
+        TimeManager.OnDayChanged -= EndDay; // イベントを解除
         StopMoveCoroutine();
         Destroy(gameObject);
     }
