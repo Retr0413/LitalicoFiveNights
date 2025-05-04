@@ -13,6 +13,9 @@ public class SystemManager : MonoBehaviour
     [Header("プレイヤー参照")]
     public Transform playerTransform;  // ← プレイヤー（またはMainCamera）のTransformを指定
 
+    [Header("監視モニター")]
+    public GameObject monitorObject;  // ← Monitorオブジェクト（Colliderつき）をここに設定
+
     private bool isDoorActive = false;
 
     void Start()
@@ -26,6 +29,13 @@ public class SystemManager : MonoBehaviour
             batteryImages[0].SetActive(true);
             batteryBars[1].SetActive(false);
             batteryImages[1].SetActive(false);
+        }
+
+        if (monitorObject != null)
+        {
+            // 念のため初期状態では有効化しておく
+            Collider col = monitorObject.GetComponent<Collider>();
+            if (col != null) col.enabled = true;
         }
     }
 
@@ -49,6 +59,13 @@ public class SystemManager : MonoBehaviour
                     if (PlayerButton != null)
                         PlayerButton.SetActive(false);
 
+                    // MonitorのColliderを無効化
+                    if (monitorObject != null)
+                    {
+                        Collider col = monitorObject.GetComponent<Collider>();
+                        if (col != null) col.enabled = false;
+                    }
+
                     SwitchBatteryUI(toSecond: true);
                 }
             }
@@ -64,6 +81,13 @@ public class SystemManager : MonoBehaviour
 
             if (PlayerButton != null)
                 PlayerButton.SetActive(true);
+
+            // MonitorのColliderを再び有効化
+            if (monitorObject != null)
+            {
+                Collider col = monitorObject.GetComponent<Collider>();
+                if (col != null) col.enabled = true;
+            }
 
             SwitchBatteryUI(toSecond: false);
         }

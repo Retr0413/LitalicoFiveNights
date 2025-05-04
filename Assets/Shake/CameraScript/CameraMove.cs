@@ -11,7 +11,7 @@ public class CameraMove : MonoBehaviour
     public Button rightUIButton;               // 右ボタン (UI.Button)
     public GameObject leftLight;
     public GameObject rightLight;
-
+    public GameObject playerUI;                // プレイヤー用UI
     private float rotationSpeed = 5f;           // 回転スピード
     private float currentAngle = 0f;            // 現在のカメラ角度
     private int currentView = 0;                // -1:左 0:正面 1:右
@@ -22,6 +22,7 @@ public class CameraMove : MonoBehaviour
 
         leftLight.SetActive(false);
         rightLight.SetActive(false);
+        playerUI.SetActive(false);
 
         // ボタンクリック時に呼び出すメソッドを設定
         leftUIButton.onClick.AddListener(OnLeftButtonClick);
@@ -52,6 +53,7 @@ public class CameraMove : MonoBehaviour
         {
             currentView -= 1;
             leftLight.SetActive(true);
+            playerUI.SetActive(true);
             RotateRelative(-rotationAmount);
             UpdateButtonVisibility();
         }
@@ -63,6 +65,7 @@ public class CameraMove : MonoBehaviour
         {
             currentView += 1;
             rightLight.SetActive(true);
+            playerUI.SetActive(true);
             RotateRelative(rotationAmount);
             UpdateButtonVisibility();
         }
@@ -101,6 +104,7 @@ public class CameraMove : MonoBehaviour
             // 正面に戻ったら両方ON
             leftButton.SetActive(true);
             rightButton.SetActive(true);
+            playerUI.SetActive(false);
         }
         else
         {
