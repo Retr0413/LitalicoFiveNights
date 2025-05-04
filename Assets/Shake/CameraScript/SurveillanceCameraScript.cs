@@ -7,6 +7,9 @@ public class SurveillanceCameraScript : MonoBehaviour
     [Header("監視カメラ（RenderTexture出力あり）")]
     public List<Camera> surveillanceCameras;
 
+    [Header("対応するUIのImageリスト")]
+    public List<Image> cameraUIImages;
+
     [Header("プレイヤーの視点カメラ")]
     public Camera mainCamera;
 
@@ -27,7 +30,7 @@ public class SurveillanceCameraScript : MonoBehaviour
     public GameObject playerUI;
 
     [Header("監視カメラ表示用テキストオブジェクト（ON/OFF切り替え対象）")]
-    public GameObject cameraTextObject; // ★ GameObjectで参照
+    public GameObject cameraTextObject;
 
     [Header("ノイズ画像（透明PNG）")]
     public Sprite noiseSprite;
@@ -90,7 +93,7 @@ public class SurveillanceCameraScript : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.Q) && isInSurveillanceMode)
         {
             isInSurveillanceMode = false;
             ReturnToMainCameraDefault();
@@ -111,6 +114,8 @@ public class SurveillanceCameraScript : MonoBehaviour
     {
         if (index >= 0 && index < surveillanceCameras.Count)
         {
+            currentCameraIndex = index;
+
             mainCamera.transform.position = surveillanceCameras[index].transform.position;
             mainCamera.transform.rotation = surveillanceCameras[index].transform.rotation;
 
@@ -121,7 +126,7 @@ public class SurveillanceCameraScript : MonoBehaviour
                 mainCameraInfoText.text = "";
 
             if (cameraTextObject != null)
-                cameraTextObject.SetActive(true); // ★ 表示ON
+                cameraTextObject.SetActive(true);
 
             if (playerUI != null)
                 playerUI.SetActive(false);
@@ -129,7 +134,20 @@ public class SurveillanceCameraScript : MonoBehaviour
             if (noiseCanvas != null)
                 noiseCanvas.gameObject.SetActive(true);
 
+            UpdateCameraUIColor(); // 🔴 修正ポイント：ここで色を更新
+
             Debug.Log($"[監視カメラ切替] Index: {index}, Name: {surveillanceCameras[index].name}");
+        }
+    }
+
+    void UpdateCameraUIColor()
+    {
+        for (int i = 0; i < cameraUIImages.Count; i++)
+        {
+            if (cameraUIImages[i] != null)
+            {
+                cameraUIImages[i].color = (i == currentCameraIndex) ? Color.red : Color.white;
+            }
         }
     }
 
@@ -154,7 +172,7 @@ public class SurveillanceCameraScript : MonoBehaviour
             cameraLabelText.text = "";
 
         if (cameraTextObject != null)
-            cameraTextObject.SetActive(false); // ★ 非表示
+            cameraTextObject.SetActive(false);
 
         if (mainCameraInfoText != null && surveillanceCameras.Count > 0)
             mainCameraInfoText.text = $"現在表示中のカメラ映像: {surveillanceCameras[currentCameraIndex].name}";
@@ -164,6 +182,8 @@ public class SurveillanceCameraScript : MonoBehaviour
 
         if (noiseCanvas != null)
             noiseCanvas.gameObject.SetActive(false);
+
+        UpdateCameraUIColor(); // 🔴 戻っても赤を維持
 
         Debug.Log("[監視カメラ解除] メインカメラに戻りました");
     }
