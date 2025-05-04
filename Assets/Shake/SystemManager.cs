@@ -49,7 +49,7 @@ public class SystemManager : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit))
             {
-                if (hit.collider.CompareTag("Panel"))
+                if (hit.collider.CompareTag("Panel") && IsFacingMonitor())
                 {
                     isDoorActive = true;
 
@@ -110,6 +110,6 @@ public class SystemManager : MonoBehaviour
         if (playerTransform == null) return false;
 
         float y = playerTransform.eulerAngles.y;
-        return (y >= 160f && y <= 200f);  // Y=180 ±20の範囲
+        return (y == 180);  // Y=180 ±20の範囲
     }
 }
